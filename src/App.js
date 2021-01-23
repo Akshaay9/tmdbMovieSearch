@@ -3,25 +3,38 @@ import axios from "axios";
 import "./app.css";
 import "./app.scss";
 import Countries from "./Countries";
-import MultiSelect from "react-multi-select-component";
-import { getAllCountries } from "./apiCalls";
+import {
+  getAllCountries,
+  getSearchedCountries,
+  regionalBlockCountries,
+  regionalCountries,
+} from "./apiCalls";
 function App() {
   const [countries, setCountries] = useState([]);
-  useEffect(() => {
-    
-  }, []);
-  
 
-  const options = [
-    { label: "name", value: "name" },
-    { label: "region", value: "region" },
-    { label: "currency", value: "currency" },
-    { label: "flag", value: "flag" },
-    { label: "capital", value: "capital" },
-    { label: "region", value: "region " },
-    { label: "language", value: "language" },
-    { label: "code", value: "code" },
-  ];
+  useEffect(async () => {
+    const data = await getAllCountries();
+    setCountries(data.data);
+    console.log("JJ");
+  }, []);
+
+  const searchHandler = async (e) => {
+    const newData = await getSearchedCountries(e.target.value);
+    setCountries(newData.data);
+  };
+  const selectHandler = async (e) => {
+    const newData = await regionalCountries(e.target.value);
+    setCountries(newData.data);
+  };
+  const selectHandler2 = async (e) => {
+    const newData = await regionalBlockCountries(e.target.value);
+    setCountries(newData.data);
+  };
+  const multiSelectHandler = (e) => {
+    console.log(e);
+  };
+
+ 
   const [selected, setSelected] = useState([]);
   // search
 
@@ -31,10 +44,11 @@ function App() {
         className="inputQuery"
         placeholder="Search for a country by name"
         type="text"
+        onChange={(e) => searchHandler(e)}
       />
 
       <div className="select">
-        <select name="Region" id="">
+        <select name="Region" id="" onChange={(e) => selectHandler(e)}>
           <option value="" disabled selected>
             Filter Countried by Region
           </option>
@@ -44,7 +58,7 @@ function App() {
           <option value="Europe">Europe</option>
           <option value="Oceania">Oceania</option>
         </select>
-        <select name="Regional Block" id="">
+        <select name="Regional Block" id="" onChange={(e) => selectHandler2(e)}>
           <option value="" disabled selected>
             Filter Countried by Regional Block
           </option>
@@ -63,12 +77,7 @@ function App() {
           <option value="SAARC">SAARC</option>
         </select>
         <div className="multiSelect">
-          <MultiSelect
-            options={options}
-            value={selected}
-            onChange={setSelected}
-            labelledBy={"Select"}
-          />
+        
         </div>
       </div>
       <div className="countries">

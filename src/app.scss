@@ -4,6 +4,9 @@
   box-sizing: border-box;
   font-family: sans-serif;
 }
+html,body{
+  overflow-x: hidden;
+}
 h3,
 h5,
 span {
@@ -32,9 +35,7 @@ h3{
     border: 1px solid rgb(21, 16, 78);
   }
 }
-.multiSelect {
-  width: 20%;
-}
+
 
 .select {
   display: flex;
@@ -104,3 +105,12 @@ select {
     padding: 4px;
   }
 }
+@media screen and (max-width: 500px) {
+  select{
+    width: 40%;
+    padding: 12px;
+  }
+  .inputQuery{
+    width: 60%;
+  }
+  }
